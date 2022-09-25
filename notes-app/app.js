@@ -1,30 +1,56 @@
-const getNotes = require('./notes.js')
+const notes = require('./notes.js')
 const validator = require('validator')
-const chalk = require('chalk')
+const yargs = require('yargs')
 
-console.log(getNotes())
-console.log(validator.isEmail('ekim@coskun.com'))
-console.log(chalk.green.inverse.bold('Success!'))
+yargs.command({
+    command: 'add',
+    describe:'Adding note',
+    builder: {
+        title:{
+            describe:'Note title',
+            demandOption: true,
+            type: 'string'
+        },
+        body:{
+            describe:'Note body',
+            demandOption: true,
+            type:'string'
+        }
+    },
+    handler: function(argv) {
+        notes.addNote(argv.title, argv.body)
+    }
+})
 
-const command = process.argv[2]
+yargs.command({
+    command: 'remove',
+    describe:'Removing note',
+    builder: {
+        title:{
+            describe:'Note title',
+            demandOption:true,
+            type:'string'
+        }
+    },
+    handler: function(argv) {
+        notes.removeNote(argv.title)
+    }
+})
 
-if(command === 'add'){
-    console.log('Adding Node!')
-}else if(command ==='remove'){
-    console.log('Removing Node!')
-}
+yargs.command({
+    command: 'list',
+    describe:'List notes',
+    handler: function() {
+        console.log('Listing the notes')
+    }
+})
 
+yargs.command({
+    command: 'read',
+    describe:'Reading note',
+    handler: function() {
+        console.log('Reading the notes')
+    }
+})
 
-/*
-const add = require('./utils.js')
-
-const sum = add(5,6)
-
-console.log(sum)
-*/
-/*
-const fs = require('fs')
-fs.writeFileSync('notes.txt', 'This file created by Node.js!')
-
-fs.appendFileSync('notes.txt', ' - and appended')
-*/
+yargs.parse()

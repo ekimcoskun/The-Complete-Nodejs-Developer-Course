@@ -1,16 +1,12 @@
-const request = require('request')
+const geocode = require('./utils/geocode')
+const forecast = require('./utils/forecast')
 
-const url = 'http://api.weatherstack.com/current?access_key=6bbfe533f30c2ec2623f61543cebcc15&query=38.423733,27.142826'
+forecast(38.423733, 27.142826, (error, data) => {
+    console.log('Error', error)
+    console.log('Data', data)
+})
 
-request({
-    url: url,
-    json: true
-}, (error, response) => {
-    if (error) {
-        console.log('Unable to connect to weather service!')
-    } else if (response.body.error) {
-        console.log('Unable to find location')
-    } else {
-        console.log('It is currently ' + response.body.current.temperature + ' degress out. It feels like ' + response.body.current.feelslike + ' degress out.')
-    }
+geocode('Boston', (error, data) => {
+    console.log('Error', error)
+    console.log('Data', data)
 })
